@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kids Schedule</title>
+
+<style>
+
+:root{
+    --dad:#c8e0ea;
+    --mum:#ead9cf;
+
+    --border:#173247;
+    --button:#155a7c;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#ffffff;
+}
+
+.header{
+    position:sticky;
+    top:0;
+    background:white;
+    padding:12px;
+    z-index:100;
+}
+
+.controls{
+    display:flex;
+    gap:8px;
+}
+
+button{
+    flex:1;
+    border:none;
+    background:var(--button);
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    padding:14px;
+    cursor:pointer;
+}
+
+.calendar{
+    padding:10px;
+}
+
+.day-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:8px;
+}
+
+.date-box{
+    width:82px;
+    border:2px solid var(--border);
+    border-radius:10px;
+    background:#f4f4f4;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    font-weight:bold;
+}
+
+.date-number{
+    font-size:18px;
+}
+
+.day-name{
+    font-size:13px;
+}
+
+.periods{
+    flex:1;
+    border:2px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.period{
+    height:30px;
+}
+
+.am{
+    border-bottom:1px solid var(--border);
+}
+
+.dad{
+    background:var(--dad);
+}
+
+.mum{
+    background:var(--mum);
+}
+
+.today{
+    outline:4px solid #ff9800;
+}
+
+#datePickerDialog{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    display:none;
+    align-items:center;
+    justify-content:center;
+}
+
+.dialog{
+    background:white;
+    padding:20px;
+    width:290px;
+    border-radius:12px;
+}
+
+.dialog input{
+    width:100%;
+    font-size:18px;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+.dialog button{
+    width:100%;
+    margin-bottom:8px;
+}
+
+.legend{
+    display:flex;
+    gap:10px;
+    padding:0 10px 10px 10px;
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+}
+
+.legend-color{
+    width:18px;
+    height:18px;
+    border:1px solid #333;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="header">
+
+    <div class="controls">
+        <button id="gotoBtn">GO TO DATE</button>
+        <button id="todayBtn">TODAY</button>
+    </div>
+
+</div>
+
+<div class="legend">
+    <div class="legend-item">
+        <div class="legend-color" style="background:var(--dad)"></div>
+        Dad
+    </div>
+
+    <div class="legend-item">
+        <div class="legend-color" style="background:var(--mum)"></div>
+        Mum
+    </div>
+</div>
+
+<div class="calendar" id="calendar"></div>
+
+<div id="datePickerDialog">
+
+    <div class="dialog">
+
+        <input type="date" id="datePicker">
+
+        <button id="goButton">GO</button>
+
+        <button id="closeButton">CLOSE</button>
+
+    </div>
+
+</div>
+
+<script>
+
+const START_DATE = new Date('2026-11-20');
+const END_DATE   = new Date('2035-12-31');
+
+const DAY_NAMES = [
+'Sun','Mon','Tue','Wed','Thu','Fri','Sat'
+];
+
+/*
+Starting Friday PM.
+
+Dad:
+6,4,4
+
+Mum:
+4,6,4
+
+Total = 28 periods
+*/
+
+const cycle = [
+'D','D','D','D','D','D',
+'M','M','M','M',
+'D','D','D','D',
+'M','M','M','M','M','M',
+'D','D','D','D',
+'M','M','M','M'
+];
+
+function daysBetween(d1,d2)
+{
+    return Math.floor(
+        (d1-d2)/(1000*60*60*24)
+    );
+}
+
+function ownerForPeriod(periodIndex)
+{
+    return cycle[
+        ((periodIndex % 28)+28)%28
+    ];
+}
+
+function formatDate(date)
+{
+    return `${date.getDate()}.${date.getMonth()+1}`;
+}
+
+function buildCalendar()
+{
+    const calendar =
+        document.getElementById("calendar");
+
+    let current =
+        new Date(START_DATE);
+
+    const today = new Date();
+
+    while(current <= END_DATE)
+    {
+        const row =
+            document.createElement("div");
+
+        row.className = "day-row";
+
+        const dateBox =
+            document.createElement("div");
+
+        dateBox.className = "date-box";
+
+        const dateNumber =
+            document.createElement("div");
+
+        dateNumber.className =
+            "date-number";
+
+        dateNumber.textContent =
+            formatDate(current);
+
+        const dayName =
+            document.createElement("div");
+
+        dayName.className =
+            "day-name";
+
+        dayName.textContent =
+            DAY_NAMES[current.getDay()];
+
+        dateBox.appendChild(dateNumber);
+        dateBox.appendChild(dayName);
+
+        const periods =
+            document.createElement("div");
+
+        periods.className = "periods";
+
+        const dayOffset =
+            daysBetween(current, START_DATE);
+
+        const amIndex =
+            dayOffset*2;
+
+        const pmIndex =
+            dayOffset*2 + 1;
+
+        const amOwner =
+            ownerForPeriod(amIndex);
+
+        const pmOwner =
+            ownerForPeriod(pmIndex);
+
+        const am =
+            document.createElement("div");
+
+        am.className =
+            `period am ${
+                amOwner==='D'
+                ? 'dad'
+                : 'mum'
+            }`;
+
+        const pm =
+            document.createElement("div");
+
+        pm.className =
+            `period ${
+                pmOwner==='D'
+                ? 'dad'
+                : 'mum'
+            }`;
+
+        periods.appendChild(am);
+        periods.appendChild(pm);
+
+        row.appendChild(dateBox);
+        row.appendChild(periods);
+
+        const id =
+        current.toISOString()
+               .substring(0,10);
+
+        row.id = id;
+
+        const sameDate =
+            current.getFullYear() === today.getFullYear()
+            &&
+            current.getMonth() === today.getMonth()
+            &&
+            current.getDate() === today.getDate();
+
+        if(sameDate)
+        {
+            row.classList.add('today');
+        }
+
+        calendar.appendChild(row);
+
+        current.setDate(
+            current.getDate()+1
+        );
+    }
+}
+
+buildCalendar();
+
+const dialog =
+document.getElementById(
+    "datePickerDialog"
+);
+
+document.getElementById(
+    "gotoBtn"
+).onclick = () =>
+{
+    dialog.style.display='flex';
+};
+
+document.getElementById(
+    "closeButton"
+).onclick = () =>
+{
+    dialog.style.display='none';
+};
+
+document.getElementById(
+    "goButton"
+).onclick = () =>
+{
+    const value =
+      document.getElementById(
+        "datePicker"
+      ).value;
+
+    if(!value) return;
+
+    const target =
+      document.getElementById(value);
+
+    if(target)
+    {
+        target.scrollIntoView({
+            behavior:'smooth',
+            block:'center'
+        });
+    }
+
+    dialog.style.display='none';
+};
+
+document.getElementById(
+    "todayBtn"
+).onclick = () =>
+{
+    const today =
+    new Date()
+      .toISOString()
+      .substring(0,10);
+
+    const target =
+      document.getElementById(today);
+
+    if(target)
+    {
+        target.scrollIntoView({
+            behavior:'smooth',
+            block:'center'
+        });
+    }
+};
+
+window.onload = () =>
+{
+    const today =
+        new Date()
+        .toISOString()
+        .substring(0,10);
+
+    const target =
+        document.getElementById(today);
+
+    if(target)
+    {
+        setTimeout(()=>{
+            target.scrollIntoView({
+                block:'center'
+            });
+        },300);
+    }
+};
+
+</script>
+
+</body>
+</html>
