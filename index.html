@@ -362,6 +362,9 @@ function buildCalendar()
         row.appendChild(dateBox);
         row.appendChild(periods);
 
+        am.textContent = amOwner;
+        pm.textContent = pmOwner;
+
         const id =
         current.toISOString()
                .substring(0,10);
