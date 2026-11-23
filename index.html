@@ -198,7 +198,33 @@ button{
 
 </div>
 
-<script>
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    addDoc
+}
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAx9eYFOutYsHHPIi_-_bfn0UG-3kcyOEQ",
+  authDomain: "kidschedule-9872f.firebaseapp.com",
+  projectId: "kidschedule-9872f",
+  storageBucket: "kidschedule-9872f.firebasestorage.app",
+  messagingSenderId: "1002124886499",
+  appId: "1:1002124886499:web:a695fea638d39e043d60d6",
+  measurementId: "G-H5075D97M1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+console.log("Firebase connected");
+
 
 const START_DATE = new Date('2026-11-20');
 const END_DATE   = new Date('2035-12-31');
