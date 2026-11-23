@@ -380,6 +380,11 @@ function buildCalendar()
         periods.appendChild(am);
         periods.appendChild(pm);
 
+        calendarSlots[id] = {
+            am,
+            pm
+        };
+
         row.appendChild(dateBox);
         row.appendChild(periods);
 
