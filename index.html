@@ -513,6 +513,26 @@ catch(error)
 {
     console.error(error);
 }
+    const changeDialog =
+    document.getElementById(
+        "changeDialog"
+    );
+
+document.getElementById(
+    "changeBtn"
+).onclick = () =>
+{
+    changeDialog.style.display =
+        "flex";
+};
+
+document.getElementById(
+    "closeChangeBtn"
+).onclick = () =>
+{
+    changeDialog.style.display =
+        "none";
+};
 </script>
 <div id="changeDialog">
 
