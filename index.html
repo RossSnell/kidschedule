@@ -474,7 +474,23 @@ window.onload = () =>
         },300);
     }
 };
+try {
 
+    const snapshot =
+        await getDocs(
+            collection(db, "overrides")
+        );
+
+    console.log(
+        "Overrides found:",
+        snapshot.docs.length
+    );
+
+}
+catch(error)
+{
+    console.error(error);
+}
 </script>
 
 </body>
