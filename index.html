@@ -496,6 +496,55 @@ window.onload = () =>
         },300);
     }
 };
+document.getElementById(
+    "saveChangeBtn"
+).onclick = async () =>
+{
+    const person =
+        document.getElementById(
+            "changePerson"
+        ).value;
+
+    const action =
+        document.getElementById(
+            "changeAction"
+        ).value;
+
+    const from =
+        document.getElementById(
+            "changeFrom"
+        ).value;
+
+    const to =
+        document.getElementById(
+            "changeTo"
+        ).value;
+
+    const note =
+        document.getElementById(
+            "changeNote"
+        ).value;
+
+    await addDoc(
+        collection(db,"overrides"),
+        {
+            person,
+            action,
+            from,
+            to,
+            note,
+            created:
+                new Date()
+                .toISOString()
+        }
+    );
+
+    alert("Saved");
+
+    changeDialog.style.display =
+        "none";
+};
+    
 try {
 
     const snapshot =
