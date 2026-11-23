@@ -325,10 +325,10 @@ function buildCalendar()
             daysBetween(current, START_DATE);
 
         const amIndex =
-            dayOffset*2;
+            dayOffset*2 - 1;
 
         const pmIndex =
-            dayOffset*2 + 1;
+            dayOffset*2;
 
         const amOwner =
             ownerForPeriod(amIndex);
