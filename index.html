@@ -499,6 +499,57 @@ catch(error)
     console.error(error);
 }
 </script>
+<div id="changeDialog">
 
+    <div class="dialog">
+
+        <label>Person</label>
+        <select id="changePerson">
+            <option>Ross</option>
+            <option>Jaana</option>
+        </select>
+
+        <label style="margin-top:10px;display:block;">
+            Action
+        </label>
+
+        <select id="changeAction">
+            <option value="wants">Wants the kids</option>
+            <option value="away">Is away</option>
+        </select>
+
+        <label style="margin-top:10px;display:block;">
+            From
+        </label>
+
+        <input type="date" id="changeFrom">
+
+        <label style="margin-top:10px;display:block;">
+            To
+        </label>
+
+        <input type="date" id="changeTo">
+
+        <label style="margin-top:10px;display:block;">
+            Note (optional)
+        </label>
+
+        <input
+            type="text"
+            id="changeNote"
+            placeholder="Holiday, dentist..."
+        >
+
+        <button id="saveChangeBtn">
+            SAVE
+        </button>
+
+        <button id="closeChangeBtn">
+            CANCEL
+        </button>
+
+    </div>
+
+</div>
 </body>
 </html>
