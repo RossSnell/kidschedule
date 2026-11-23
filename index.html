@@ -503,6 +503,60 @@ async function loadOverrides()
         applyOverride(override);
     });
 }
+
+function applyOverride(override)
+{
+    const person =
+        override.person;
+
+    const action =
+        override.action;
+
+    const fromDate =
+        new Date(override.from);
+
+    const toDate =
+        new Date(override.to);
+
+    let owner;
+
+    if(action === "wants")
+    {
+        owner = person;
+    }
+    else
+    {
+        owner =
+            person === "Ross"
+            ? "Jaana"
+            : "Ross";
+    }
+
+    let current =
+        new Date(fromDate);
+
+    while(current <= toDate)
+    {
+        const id =
+            current.toISOString()
+                   .substring(0,10);
+
+        if(calendarSlots[id])
+        {
+            updateDay(
+                calendarSlots[id],
+                owner,
+                current,
+                fromDate,
+                toDate
+            );
+        }
+
+        current.setDate(
+            current.getDate()+1
+        );
+    }
+}
     
 window.onload = () =>
 {
