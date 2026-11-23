@@ -377,9 +377,17 @@ function buildCalendar()
                 : 'mum'
             }`;
 
+
+        
+        const id =
+        current.toISOString()
+               .substring(0,10);
+
+        row.id = id;
+
         periods.appendChild(am);
         periods.appendChild(pm);
-
+        
         calendarSlots[id] = {
             am,
             pm
@@ -391,11 +399,7 @@ function buildCalendar()
         am.textContent = amOwner;
         pm.textContent = pmOwner;
 
-        const id =
-        current.toISOString()
-               .substring(0,10);
 
-        row.id = id;
 
         const sameDate =
             current.getFullYear() === today.getFullYear()
