@@ -488,6 +488,22 @@ document.getElementById(
     }
 };
 
+async function loadOverrides()
+{
+    const snapshot =
+        await getDocs(
+            collection(db,"overrides")
+        );
+
+    snapshot.forEach(doc =>
+    {
+        const override =
+            doc.data();
+
+        applyOverride(override);
+    });
+}
+    
 window.onload = () =>
 {
     const today =
