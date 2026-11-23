@@ -557,7 +557,52 @@ function applyOverride(override)
         );
     }
 }
-    
+
+function updateDay(
+    slot,
+    owner,
+    current,
+    fromDate,
+    toDate
+)
+{
+    const colour =
+        owner === "Ross"
+        ? "dad"
+        : "mum";
+
+    const dayString =
+        current.toISOString()
+               .substring(0,10);
+
+    const fromString =
+        fromDate.toISOString()
+                .substring(0,10);
+
+    const toString =
+        toDate.toISOString()
+              .substring(0,10);
+
+    if(dayString === fromString)
+    {
+        slot.pm.className =
+            `period ${colour}`;
+    }
+    else if(dayString === toString)
+    {
+        slot.am.className =
+            `period am ${colour}`;
+    }
+    else
+    {
+        slot.am.className =
+            `period am ${colour}`;
+
+        slot.pm.className =
+            `period ${colour}`;
+    }
+}
+
 window.onload = () =>
 {
     const today =
