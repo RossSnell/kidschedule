@@ -114,8 +114,10 @@ button{
     inset:0;
     background:rgba(0,0,0,0.4);
     display:none;
-    align-items:center;
+    align-items:flex-start;
     justify-content:center;
+    z-index:9999;
+    padding-top:80px;
 }
 
 .dialog{
@@ -123,6 +125,15 @@ button{
     padding:20px;
     width:290px;
     border-radius:12px;
+}
+
+.dialog{
+    background:white;
+    padding:20px;
+    width:290px;
+    border-radius:12px;
+    max-height:80vh;
+    overflow-y:auto;
 }
 
 .dialog input{
