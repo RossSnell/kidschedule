@@ -636,7 +636,75 @@ function updateDay(
             `period ${colour}`;
     }
 }
+async function showChanges()
+{
+    const container =
+        document.getElementById(
+            "changesList"
+        );
 
+    container.innerHTML = "";
+
+    const snapshot =
+        await getDocs(
+            collection(db,"overrides")
+        );
+
+    snapshot.forEach(d =>
+    {
+        const o = d.data();
+
+        const row =
+            document.createElement("div");
+
+        row.style.border =
+            "1px solid #ccc";
+
+        row.style.padding =
+            "8px";
+
+        row.style.marginBottom =
+            "8px";
+
+        row.innerHTML = `
+            <b>${o.person}</b>
+            (${o.action})
+            <br>
+            ${o.from} → ${o.to}
+            <br>
+            ${o.note || ""}
+            <br><br>
+            <button
+                data-id="${d.id}"
+                class="deleteBtn">
+                DELETE
+            </button>
+        `;
+
+        container.appendChild(row);
+    });
+
+    document
+        .querySelectorAll(".deleteBtn")
+        .forEach(btn =>
+        {
+            btn.onclick =
+            async () =>
+            {
+                await deleteDoc(
+                    doc(
+                        db,
+                        "overrides",
+                        btn.dataset.id
+                    )
+                );
+
+                await showChanges();
+
+                location.reload();
+            };
+        });
+}
 window.onload = () =>
 {
     const today =
