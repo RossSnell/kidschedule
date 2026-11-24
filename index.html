@@ -636,7 +636,7 @@ async function loadOverrides()
         id: doc.id,
         ...doc.data()
 };
-    calculateBalance();
+
     console.log(
         "Applying override:",
         override
@@ -644,6 +644,7 @@ async function loadOverrides()
 
     applyOverride(override);
 });
+    calculateBalance();
 }
 
 function applyOverride(override)
