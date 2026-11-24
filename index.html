@@ -543,7 +543,86 @@ document.getElementById(
         });
     }
 };
+function calculateBalance()
+{
+    let balance = 0;
 
+    const rows =
+        document.querySelectorAll(".day-row");
+
+    rows.forEach(row =>
+    {
+        const dateId = row.id;
+
+        if(!dateId || !calendarSlots[dateId]) return;
+
+        const currentDate =
+            new Date(dateId);
+
+        const dayOffset =
+            daysBetween(currentDate, START_DATE);
+
+        const amIndex = dayOffset * 2 - 1;
+        const pmIndex = dayOffset * 2;
+
+        const originalAm =
+            ownerForPeriod(amIndex);
+
+        const originalPm =
+            ownerForPeriod(pmIndex);
+
+        const amRoss =
+            calendarSlots[dateId]
+            .am
+            .classList
+            .contains("dad");
+
+        const pmRoss =
+            calendarSlots[dateId]
+            .pm
+            .classList
+            .contains("dad");
+
+        const actualAm =
+            amRoss ? "D" : "M";
+
+        const actualPm =
+            pmRoss ? "D" : "M";
+
+        if(originalAm === "M" && actualAm === "D")
+            balance += 0.5;
+
+        if(originalAm === "D" && actualAm === "M")
+            balance -= 0.5;
+
+        if(originalPm === "M" && actualPm === "D")
+            balance += 0.5;
+
+        if(originalPm === "D" && actualPm === "M")
+            balance -= 0.5;
+    });
+
+    const days = Math.round(Math.abs(balance));
+
+    let text = "All square";
+
+    if(days > 0)
+    {
+        if(balance > 0)
+        {
+            text =
+                `Ross ${days} day${days===1?"":"s"} extra`;
+        }
+        else
+        {
+            text =
+                `Jaana ${days} day${days===1?"":"s"} extra`;
+        }
+    }
+
+    document.getElementById("balanceBar")
+        .textContent = text;
+}
 async function loadOverrides()
 {
     const snapshot =
