@@ -525,10 +525,10 @@ async function loadOverrides()
 
     snapshot.forEach(doc =>
 {
-    const override =
+    const override = {
         id: doc.id,
         doc.data();
-
+};
     console.log(
         "Applying override:",
         override
