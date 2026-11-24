@@ -742,6 +742,28 @@ document.getElementById(
     changeDialog.style.display =
         "none";
 };
+const manageDialog =
+    document.getElementById(
+        "manageDialog"
+    );
+
+document.getElementById(
+    "manageBtn"
+).onclick = async () =>
+{
+    await showChanges();
+
+    manageDialog.style.display =
+        "flex";
+};
+
+document.getElementById(
+    "closeManageBtn"
+).onclick = () =>
+{
+    manageDialog.style.display =
+        "none";
+};
 </script>
 <div id="changeDialog">
 
